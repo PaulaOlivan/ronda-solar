@@ -12,14 +12,15 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{font-family:'Baloo 2',system-ui,sans-serif;color:var(--ink);overflow-x:hidden;
- background:radial-gradient(circle at 50% -10%,#fff3c4 0,#ffd27a 35%,#ff9f5a 75%,#f2734a 100%);background-attachment:fixed;min-height:100vh}
-body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.25;
- background-image:repeating-conic-gradient(from 0deg at 50% -10%,#fff 0 4deg,transparent 4deg 12deg)}
+ background:radial-gradient(circle at 50% -10%,#e9c99a 0,#b97f45 35%,#8a5428 70%,#5c3518 100%);background-attachment:fixed;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;
+ background-image:repeating-conic-gradient(from 0deg at 50% -10%,#ffe7c2 0 4deg,transparent 4deg 12deg)}
 .screen{position:relative;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px 18px;text-align:center;gap:18px}
 .screen.on{display:flex;animation:fade .6s ease}
 @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .tag{font-weight:800;letter-spacing:.18em;text-transform:uppercase;font-size:.85rem;background:var(--ink);color:var(--paper);padding:4px 14px;border-radius:99px}
-h1{font-size:clamp(1.7rem,6vw,2.8rem);line-height:1.1;font-weight:800;max-width:640px;text-shadow:0 2px 0 rgba(255,255,255,.5)}
+h1{font-size:clamp(1.7rem,6vw,2.8rem);line-height:1.1;font-weight:800;max-width:640px;color:var(--paper);text-shadow:0 3px 0 rgba(43,33,28,.55)}
+.panel h1{color:var(--ink);text-shadow:none}
 h1 .name{color:#fff;-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;display:inline-block;animation:wob 2.4s ease-in-out infinite}
 @keyframes wob{50%{transform:rotate(-3deg) scale(1.06)}}
 .btn{font:inherit;font-weight:800;font-size:1.25rem;border:3px solid var(--ink);background:#fff;color:var(--ink);padding:12px 30px;border-radius:16px;
@@ -35,7 +36,7 @@ input{font:inherit;font-size:1.8rem;font-weight:800;letter-spacing:.3em;text-ali
 .err{color:#b3261e;font-weight:700;min-height:1.4em}
 /* orbit */
 .orbit-wrap{position:relative;width:min(78vw,340px);aspect-ratio:1}
-.orbit-wrap::before{content:"";position:absolute;inset:12%;border:3px dashed rgba(43,33,28,.35);border-radius:50%}
+.orbit-wrap::before{content:"";position:absolute;inset:12%;border:3px dashed rgba(255,240,215,.45);border-radius:50%}
 .sun{position:absolute;inset:31%;border-radius:50%;background:radial-gradient(circle,#fff6c9 0,#ffd23f 55%,#ffa62b 100%);
  border:3px solid var(--ink);display:grid;place-items:center;font-size:clamp(2.5rem,12vw,4.2rem);font-weight:800;animation:glow 2s ease-in-out infinite}
 @keyframes glow{50%{box-shadow:0 0 0 14px rgba(255,255,255,.35),0 0 40px 10px #fff3a0}}
@@ -58,8 +59,8 @@ input{font:inherit;font-size:1.8rem;font-weight:800;letter-spacing:.3em;text-ali
 .prize .t2{font-size:clamp(2rem,9vw,2.8rem);font-weight:800;line-height:1}
 #scratch{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;transition:opacity .8s}
 #scratch.gone{opacity:0;pointer-events:none}
-.hint{font-weight:700;font-size:1.1rem}
-.after{display:none;flex-direction:column;align-items:center;gap:8px}
+.hint{font-weight:700;font-size:1.1rem;color:var(--paper)}
+.after{color:var(--paper);text-shadow:0 2px 0 rgba(43,33,28,.5);display:none;flex-direction:column;align-items:center;gap:8px}
 .after.on{display:flex;animation:fade .6s ease}
 .after h2{font-size:clamp(1.5rem,6vw,2.2rem);line-height:1.1}
 .won .card{animation:boing .7s ease}
@@ -74,7 +75,7 @@ input{font:inherit;font-size:1.8rem;font-weight:800;letter-spacing:.3em;text-ali
 <section class="screen" id="s-code">
   <span class="tag">Ronda Solar</span>
   <div class="panel">
-    <h1 style="font-size:1.8rem">¡Hola, aventurero/a!</h1>
+    <h1 style="font-size:1.8rem">¡Bienvenido, pionero!</h1>
     <p>Escribe el código secreto de tu tarjeta para descubrir tu equipo.</p>
     <input id="code" maxlength="5" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="·····">
     <button class="btn" id="go">Entrar</button>
