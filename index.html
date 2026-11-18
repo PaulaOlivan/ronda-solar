@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Ronda Solar · Descubre tu equipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2b211c;--paper:#fff8ea;--sun:#ffb938;--sun2:#ff8a3d}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Baloo 2',system-ui,sans-serif;color:var(--ink);overflow-x:hidden;
+ background:radial-gradient(circle at 50% -10%,#fff3c4 0,#ffd27a 35%,#ff9f5a 75%,#f2734a 100%);background-attachment:fixed;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.25;
+ background-image:repeating-conic-gradient(from 0deg at 50% -10%,#fff 0 4deg,transparent 4deg 12deg)}
+.screen{position:relative;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:28px 18px;text-align:center;gap:18px}
+.screen.on{display:flex;animation:fade .6s ease}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.tag{font-weight:800;letter-spacing:.18em;text-transform:uppercase;font-size:.85rem;background:var(--ink);color:var(--paper);padding:4px 14px;border-radius:99px}
+h1{font-size:clamp(1.7rem,6vw,2.8rem);line-height:1.1;font-weight:800;max-width:640px;text-shadow:0 2px 0 rgba(255,255,255,.5)}
+h1 .name{color:#fff;-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;display:inline-block;animation:wob 2.4s ease-in-out infinite}
+@keyframes wob{50%{transform:rotate(-3deg) scale(1.06)}}
+.btn{font:inherit;font-weight:800;font-size:1.25rem;border:3px solid var(--ink);background:#fff;color:var(--ink);padding:12px 30px;border-radius:16px;
+ box-shadow:0 6px 0 var(--ink);cursor:pointer;transition:transform .1s,box-shadow .1s}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--ink)}
+.btn.pulse{animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.06)}}
+/* code screen */
+.panel{background:var(--paper);border:3px solid var(--ink);border-radius:22px;padding:26px 22px;box-shadow:0 8px 0 var(--ink);max-width:380px;width:100%}
+.panel p{margin:6px 0 16px}
+input{font:inherit;font-size:1.8rem;font-weight:800;letter-spacing:.3em;text-align:center;text-transform:uppercase;width:100%;
+ border:3px solid var(--ink);border-radius:14px;padding:8px;background:#fff;margin-bottom:16px}
+.err{color:#b3261e;font-weight:700;min-height:1.4em}
+/* orbit */
+.orbit-wrap{position:relative;width:min(78vw,340px);aspect-ratio:1}
+.orbit-wrap::before{content:"";position:absolute;inset:12%;border:3px dashed rgba(43,33,28,.35);border-radius:50%}
+.sun{position:absolute;inset:31%;border-radius:50%;background:radial-gradient(circle,#fff6c9 0,#ffd23f 55%,#ffa62b 100%);
+ border:3px solid var(--ink);display:grid;place-items:center;font-size:clamp(2.5rem,12vw,4.2rem);font-weight:800;animation:glow 2s ease-in-out infinite}
+@keyframes glow{50%{box-shadow:0 0 0 14px rgba(255,255,255,.35),0 0 40px 10px #fff3a0}}
+.orbit{position:absolute;inset:0;animation:spin 14s linear infinite}
+.orbit .k{position:absolute;width:32%;left:34%;top:34%;
+ transform:rotate(var(--a)) translateY(-148%) rotate(calc(-1 * var(--a)))}
+.orbit .k img{width:100%;display:block;animation:spin 14s linear infinite reverse;filter:drop-shadow(0 4px 0 rgba(43,33,28,.25))}
+.orbit .k img{animation:spin 14s linear infinite reverse,bob 2.2s ease-in-out infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes bob{50%{translate:0 -6px}}
+.legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.legend span{font-weight:800;font-size:.95rem;border:2px solid var(--ink);border-radius:99px;padding:1px 12px;background:var(--c)}
+/* scratch */
+.card{position:relative;width:min(88vw,360px);aspect-ratio:3/4;border:4px solid var(--ink);border-radius:26px;overflow:hidden;
+ box-shadow:0 10px 0 var(--ink);background:var(--paper);user-select:none;-webkit-user-select:none}
+.prize{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;gap:4px;
+ background:radial-gradient(circle at 50% 40%,#fff 0,var(--tc,#fff) 120%)}
+.prize img{width:78%;max-height:58%;object-fit:contain}
+.prize .t1{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em}
+.prize .t2{font-size:clamp(2rem,9vw,2.8rem);font-weight:800;line-height:1}
+#scratch{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;transition:opacity .8s}
+#scratch.gone{opacity:0;pointer-events:none}
+.hint{font-weight:700;font-size:1.1rem}
+.after{display:none;flex-direction:column;align-items:center;gap:8px}
+.after.on{display:flex;animation:fade .6s ease}
+.after h2{font-size:clamp(1.5rem,6vw,2.2rem);line-height:1.1}
+.won .card{animation:boing .7s ease}
+@keyframes boing{30%{transform:scale(1.08) rotate(-2deg)}60%{transform:scale(.97) rotate(1deg)}}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:10}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+
+<!-- 1. Code entry (only if no code in the link) -->
+<section class="screen" id="s-code">
+  <span class="tag">Ronda Solar</span>
+  <div class="panel">
+    <h1 style="font-size:1.8rem">¡Hola, aventurero/a!</h1>
+    <p>Escribe el código secreto de tu tarjeta para descubrir tu equipo.</p>
+    <input id="code" maxlength="5" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="·····">
+    <button class="btn" id="go">Entrar</button>
+    <p class="err" id="err"></p>
+  </div>
+</section>
+
+<!-- 2. Intro -->
+<section class="screen" id="s-intro">
+  <span class="tag">Ronda Solar</span>
+  <h1>¿Cuál será tu equipo durante esta Ronda Solar, <span class="name" id="who"></span>?</h1>
+  <div class="orbit-wrap">
+    <div class="orbit">
+      <div class="k" style="--a:0deg"><img src="images/gilwell.png" alt="Gilwell"></div>
+      <div class="k" style="--a:90deg"><img src="images/prusik.png" alt="Prusik"></div>
+      <div class="k" style="--a:180deg"><img src="images/yosemite.png" alt="Yosemite"></div>
+      <div class="k" style="--a:270deg"><img src="images/clove.png" alt="Clove"></div>
+    </div>
+    <div class="sun">?</div>
+  </div>
+  <div class="legend">
+    <span style="--c:#f2c48f">Gilwell</span><span style="--c:#f2a39b">Prusik</span>
+    <span style="--c:#9cc4ec">Yosemite</span><span style="--c:#b5dc9f">Clove</span>
+  </div>
+  <button class="btn pulse" id="toScratch">Rasca para descubrirlo</button>
+</section>
+
+<!-- 3. Scratch card -->
+<section class="screen" id="s-scratch">
+  <span class="tag">Ronda Solar</span>
+  <p class="hint" id="hint">Rasca la tarjeta con el dedo…</p>
+  <div class="card">
+    <div class="prize" id="prize">
+      <span class="t1">Tu equipo es</span>
+      <img id="pimg" alt="">
+      <span class="t2" id="pname"></span>
+    </div>
+    <canvas id="scratch"></canvas>
+  </div>
+  <div class="after" id="after">
+    <h2 id="congr"></h2>
+    <p>¡Que empiece la Ronda Solar!</p>
+  </div>
+</section>
+
+<script>
+const DATA={"49065dc49895f82c":"FBJiebqsWYwhhqpCX4I=","da153cde05115dd9":"Zv7KxWuAMeuZrcDWiYH2ivM=","92ea539d6ce8d0b6":"y4zn70VVphpS0w==","9c88afe6a56e17b8":"MspRMH1W2QBDzFSx0A==","bf2669e026ac6c40":"NKfQbciqFbneRjlEGLXB","633f74a621591476":"1xPo+JoqHpyYuoLB","ed0ffc3439593157":"IqQoPwS1czp7oXg0+Q==","1e4807fedce56558":"KO2ZR7EBcTwukUo=","f3fae7c28b21b425":"JQtq3xFI6eAFhdgdjP4mq1sL","ca006ac6807ba823":"RTZRlPRRdORT3Mdp","6503edff170d3064":"qz/Gaman0HOoF8Cndzw=","e0a20c37634e3abd":"Sc4UxMA/MmDuu9S2rg==","63359387ead4f26d":"F/UI3Nsrap+MtJO/CU4=","5fd76936ec690e92":"4po+zaUhiuZNNhqYSb8=","836b75ed813d157e":"Cy7uNaTjiuToVW0WRMeq","4b0e9625c2837611":"9BTSZjPbDANZPDjttA1e","5aef6f4a47a7bb1e":"VTra1fzF3TQHMYrrww4=","17b2fe9381aabb0b":"i2jFCpZ4SNhUC10R3T+L","a4edae1eba03d149":"pYrFKK0XEph1Wr3w","2a52dadc991bb065":"Swb2ZxctR/SDS7Uf0Q==","e558e3c52b334515":"G+M0nV0S9zUmNa1xypic","146c35022bae40a2":"doUpxxkHb1pf1uL+oQ==","40cb5cb5ea524593":"LAK8Xptc9hmieZ0=","b4d543aa4cf24d6c":"EV/mlHSaktBLYAbdYm9d4w==","b1f4d115e871ea3c":"kDv9oHHBSVumtvNpag==","7b77cd30ab587a62":"7XyUsSTWR2opzFF+wj4=","c0983bdcc3824c6d":"u9LNcUhMSD19F+OXWhM=","9adb2a882bef5d35":"AmN0JzWLXJy3Xu/s","c9e629319e246b06":"mGv8CrZwzOgNPFg=","4949c875c84a9b8f":"BF6QiGakxViqpzsMGbQ="};
+const TEAMS={
+  gilwell:{n:'Gilwell',c:'#f2c48f'},prusik:{n:'Prusik',c:'#f2a39b'},
+  yosemite:{n:'Yosemite',c:'#9cc4ec'},clove:{n:'Clove',c:'#b5dc9f'}};
+const $=id=>document.getElementById(id);
+const show=id=>{document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));scrollTo(0,0)};
+
+async function sha(s){return new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)))}
+const hex=b=>[...b].map(x=>x.toString(16).padStart(2,'0')).join('');
+async function decode(code){
+  code=(code||'').trim().toUpperCase();
+  const enc=DATA[hex(await sha(code+'|id')).slice(0,16)];
+  if(!enc)return null;
+  const key=await sha(code+'|key');
+  const b=Uint8Array.from(atob(enc),c=>c.charCodeAt(0)).map((x,i)=>x^key[i]);
+  const [name,team]=new TextDecoder().decode(b).split('|');
+  return {name,team};
+}
+
+let ME=null;
+async function enter(code,fromLink){
+  const r=await decode(code);
+  if(!r){ if(fromLink){show('s-code')} $('err').textContent='Ese código no existe. ¡Revísalo bien!'; return }
+  ME=r;
+  $('who').textContent=r.name;
+  const t=TEAMS[r.team];
+  $('pimg').src='images/'+r.team+'.png'; $('pname').textContent=t.n;
+  $('prize').style.setProperty('--tc',t.c);
+  show('s-intro');
+}
+$('go').onclick=()=>enter($('code').value);
+$('code').addEventListener('keydown',e=>{if(e.key==='Enter')enter($('code').value)});
+$('toScratch').onclick=()=>{show('s-scratch');requestAnimationFrame(initScratch)};
+
+/* ---------- scratch layer ---------- */
+const cv=$('scratch');let ctx,done=false,moves=0;
+function initScratch(){
+  const r=cv.getBoundingClientRect(),dpr=devicePixelRatio||1;
+  cv.width=r.width*dpr;cv.height=r.height*dpr;ctx=cv.getContext('2d');ctx.scale(dpr,dpr);
+  const w=r.width,h=r.height;
+  const g=ctx.createLinearGradient(0,0,w,h);
+  g.addColorStop(0,'#cfcfcf');g.addColorStop(.45,'#f4f4f4');g.addColorStop(.55,'#bdbdbd');g.addColorStop(1,'#e2e2e2');
+  ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  for(let i=0;i<900;i++){ctx.fillStyle=`rgba(${Math.random()<.5?255:90},${Math.random()<.5?255:90},${Math.random()<.5?255:90},.18)`;
+    ctx.fillRect(Math.random()*w,Math.random()*h,2,2)}
+  // decorative sun + rope border
+  ctx.strokeStyle='#8a8a8a';ctx.lineWidth=3;ctx.setLineDash([10,6]);ctx.strokeRect(14,14,w-28,h-28);ctx.setLineDash([]);
+  ctx.save();ctx.translate(w/2,h*.38);ctx.fillStyle='#a9a9a9';
+  for(let i=0;i<12;i++){ctx.rotate(Math.PI/6);ctx.beginPath();ctx.moveTo(-7,-48);ctx.lineTo(0,-72);ctx.lineTo(7,-48);ctx.fill()}
+  ctx.beginPath();ctx.arc(0,0,42,0,7);ctx.fill();ctx.fillStyle='#f2f2f2';ctx.font='800 46px "Baloo 2",sans-serif';
+  ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('?',0,4);ctx.restore();
+  ctx.fillStyle='#6d6d6d';ctx.textAlign='center';ctx.font='800 30px "Baloo 2",sans-serif';ctx.fillText('¡RASCA AQUÍ!',w/2,h*.72);
+  ctx.font='700 16px "Baloo 2",sans-serif';ctx.fillText('y descubre tu nudo',w/2,h*.72+28);
+  ctx.globalCompositeOperation='destination-out';
+}
+let last=null;
+function pos(e){const r=cv.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top}}
+function line(a,b){ctx.lineWidth=44;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+  if(++moves%8===0)check()}
+cv.addEventListener('pointerdown',e=>{if(done)return;cv.setPointerCapture(e.pointerId);last=pos(e);line(last,{x:last.x+.1,y:last.y});$('hint').textContent='¡Sigue, sigue!'; tick()});
+cv.addEventListener('pointermove',e=>{if(!last||done)return;const p=pos(e);line(last,p);last=p});
+['pointerup','pointercancel','pointerleave'].forEach(t=>cv.addEventListener(t,()=>{last=null;check()}));
+function check(){
+  if(done)return;const d=ctx.getImageData(0,0,cv.width,cv.height).data;let clear=0,n=0;
+  for(let i=3;i<d.length;i+=4*24){n++;if(d[i]<20)clear++}
+  if(clear/n>.5)win();
+}
+function win(){
+  done=true;cv.classList.add('gone');document.body.classList.add('won');
+  $('hint').textContent='';
+  const t=TEAMS[ME.team];
+  $('congr').innerHTML=`¡Enhorabuena, ${ME.name}!<br>Eres del equipo ${t.n}`;
+  $('after').classList.add('on');
+  confetti();fanfare();
+}
+
+/* ---------- sound ---------- */
+let ac;function audio(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)()}catch(e){}return ac}
+function tone(f,t0,d,type='triangle',v=.18){const a=audio();if(!a)return;const o=a.createOscillator(),g=a.createGain();
+  o.type=type;o.frequency.value=f;g.gain.setValueAtTime(v,a.currentTime+t0);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+t0+d);
+  o.connect(g).connect(a.destination);o.start(a.currentTime+t0);o.stop(a.currentTime+t0+d)}
+let lastTick=0;function tick(){const n=performance.now();if(n-lastTick>90){lastTick=n;tone(900+Math.random()*300,0,.05,'square',.03)}}
+cv.addEventListener('pointermove',()=>{if(last&&!done)tick()});
+function fanfare(){[523,659,784,1047,784,1047].forEach((f,i)=>tone(f,i*.12,i===5?.6:.18))}
+
+/* ---------- confetti ---------- */
+function confetti(){
+  const c=$('fx'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+  const cols=['#f2c48f','#f2a39b','#9cc4ec','#b5dc9f','#ffd23f','#ffffff'];
+  const P=Array.from({length:220},(_,i)=>({x:c.width/2,y:c.height*.45,vx:(Math.random()-.5)*16,vy:-Math.random()*16-4,
+    s:6+Math.random()*7,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:cols[i%cols.length]}));
+  let f=0;(function loop(){x.clearRect(0,0,c.width,c.height);
+    P.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);
+      x.fillStyle=p.c;x.strokeStyle='#2b211c';x.lineWidth=1;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.strokeRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore()});
+    if(++f<260)requestAnimationFrame(loop);else x.clearRect(0,0,c.width,c.height)})();
+}
+
+/* ---------- start ---------- */
+const qc=new URLSearchParams(location.search).get('c');
+if(qc)enter(qc,true);else show('s-code');
+</script>
+</body>
+</html>
